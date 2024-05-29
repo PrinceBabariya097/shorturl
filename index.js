@@ -1,9 +1,12 @@
 import express from "express";
 import { connectMongo } from "./connection.js";
 import { router } from "./route/url.js";
+import cors from 'cors'
 
 const app = express();
-const port = 3000;
+const port = 5500;
+
+app.use(cors())
 
 connectMongo()
   .then(() => console.log("mongodb is connect successfullt!!!"))

@@ -15,8 +15,10 @@ console.log(uuid());
 
 const generateNewShortURL = async (req, res) => {
   try {
-    const url = req.body.url;
+    const url = req.body.url || req.body;
     console.log(url);
+    console.log(req.protocol,req.get('host'),req.originalurl);
+    const shortUrl = `${req.protocol}://${req.get('host')}/${uuid()}`
     const newURL = await URL.create({
       url,
       shortUrl: uuid(),
@@ -32,6 +34,7 @@ const redirectToURL = async (req, res) => {
   try {
 
     const shortUrl = req.params.shorturl;
+    console.log(shortUrl,'shortUrl');
 
     if (!shortUrl) return res.status(400).respons("url is requires");
 
@@ -42,7 +45,7 @@ const redirectToURL = async (req, res) => {
       }
     );
 
-    console.log(urlObject);
+    console.log(urlObject,'urlObject');
     console.log(urlObject.url);
 
     res.redirect(urlObject.url);
