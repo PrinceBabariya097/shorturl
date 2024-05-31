@@ -7,9 +7,10 @@ import { fileURLToPath } from "url";
 import { URL } from "./model/url.js";
 import { getUserId, isUserValid } from "./middelware/auth.js";
 import cookieParser from "cookie-parser";
+import  'dotenv/config'
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

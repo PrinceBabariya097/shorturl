@@ -1,8 +1,8 @@
 import { getUser } from "../service/auth.js"
 
 const isUserValid = (req, res, next) => {
-    const cookie = req.cookies?.uid
-
+    const cookie = req?.cookies.uid
+    console.log(req.cookies);
     if(!cookie) return res.redirect('/login')
 
     const user = getUser(cookie)

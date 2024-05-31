@@ -1,11 +1,15 @@
-const setUserAndSessionId = new Map()
+import jwt from 'jsonwebtoken'
+import  'dotenv/config'
 
-const setUser = (id, user) => {
-    setUserAndSessionId.set(id, user)
+const setUser = (user) => {
+    return jwt.sign({
+        id:user._id,
+        email:user.email,
+    },process.env.JWTSICRETKEY)
 }
 
 const getUser = (id) => {
-    return setUserAndSessionId.get(id)
+    return jwt.verify(id,process.env.JWTSICRETKEY)
 }
 
 export {

@@ -48,9 +48,8 @@ const logInUser = async (req, res) => {
             return res.status(400).json({error: "Invalid credentials."})
         }
 
-        const sessionID = generateUUID()
-        setUser(sessionID,isUser)
-        res.cookie('uid',sessionID)
+          const token = setUser(isUser)
+        res.cookie('uid',token)
 
         return res.redirect("/")
       } catch (error) {
