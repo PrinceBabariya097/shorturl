@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { generateNewShortURL, getAnalytics, redirectToURL } from "../middelware/url.js";
+import { generateNewShortURL, getAnalytics, redirectToURL } from "../controller/url.js";
+import { getUserId } from "../middelware/auth.js";
 
-export const router = Router()
+export const urlrouter = Router()
 
-router.route('/').post(generateNewShortURL)
-router.route('/:shorturl').get(redirectToURL)
-router.route('/analytics/:shorturl').get(getAnalytics)
+urlrouter.route('/').post(getUserId,generateNewShortURL)
+urlrouter.route('/:shorturl').get(redirectToURL)
+urlrouter.route('/analytics/:shorturl').get(getAnalytics)

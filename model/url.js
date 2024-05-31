@@ -15,7 +15,11 @@ const urlSchema = new mongoose.Schema(
             {
                 timestamps: {type: Number}
             }
-        ]
+        ],
+        owner:{
+            type:mongoose.Schema.ObjectId,
+            ref: 'User',
+        }
     },{
         timestamps: true
     }

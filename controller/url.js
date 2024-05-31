@@ -16,13 +16,12 @@ console.log(uuid());
 const generateNewShortURL = async (req, res) => {
   try {
     const url = req.body.url || req.body;
-    console.log(url);
-    console.log(req.protocol,req.get('host'),req.originalurl);
     const shortUrl = `${req.protocol}://${req.get('host')}/${uuid()}`
     const newURL = await URL.create({
       url,
       shortUrl: uuid(),
       visitedHistory: [],
+      owner:res.user?._id,
     });
     return res.status(201).json(newURL);
   } catch (error) {

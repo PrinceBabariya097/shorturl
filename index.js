@@ -1,17 +1,51 @@
 import express from "express";
 import { connectMongo } from "./connection.js";
-import { router } from "./route/url.js";
-import cors from 'cors'
+import { urlrouter } from "./route/url.js";
+import { userRouter } from "./route/user.route.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import { URL } from "./model/url.js";
+import { getUserId, isUserValid } from "./middelware/auth.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
-const port = 5500;
+const port = 3000;
 
-app.use(cors())
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "view")));
+
+app.use(cookieParser());
 
 connectMongo()
   .then(() => console.log("mongodb is connect successfullt!!!"))
   .catch((err) => console.error(err));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/url", urlrouter);
+app.use("/user", userRouter);
+
+app.get("/", isUserValid, (req, res) => {
+  res.sendFile(path.join(__dirname, "view", "url", "index.html"));
+});
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname, "view", "signup", "index.html"));
+});
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "view", "login", "index.html"));
+});
+
+app.get("/api/urlData",getUserId, async (req, res) => {
+  if (!res.user) return 
+  const userId = res.user._id;
+  const urlData = await URL.find({
+    owner:userId
+  });
+  console.log(urlData,"urlData");
+
+  res.json(urlData);
+});
+
 app.listen(port, () => console.log("server is running at port", port));
-app.use(express.json())
-app.use('/url', router)
