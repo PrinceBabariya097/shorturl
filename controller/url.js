@@ -11,12 +11,10 @@ const uuid = () => {
   return uuid;
 };
 
-console.log(uuid());
 
 const generateNewShortURL = async (req, res) => {
   try {
     const url = req.body.url || req.body;
-    const shortUrl = `${req.protocol}://${req.get('host')}/${uuid()}`
     const newURL = await URL.create({
       url,
       shortUrl: uuid(),

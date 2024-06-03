@@ -1,34 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link href="/view/output.css" rel="stylesheet" type="text/css" />
+    <title>Url-Shortener</title>
+    <style>
+    table, th, td {
+  border: 1px solid whitesmoke;
+  padding: 8px;
+  border-collapse: collapse;
+
+}
+    </style>
   </head>
-  <body class="flex flex-col items-center h-screen justify-center bg-blue-800">
+  <body style="padding: 0%; margin: 0%; display: flex; background-color: black; color: aliceblue; flex-direction: column; height: 100%;  align-items: center; justify-content: center;">
     <form id="urlForm">
-      <label for="url" class="text-slate-400 text-xl">Enter your url : </label>
+      <label for="url" style="margin-bottom: 20px;">Enter your url : </label><br>
       <input
         type="text"
         name="url"
         id="url"
         placeholder="enter your url"
-        class="h-10 rounded-md bg-cyan-500 text-white"
+        style="height: 30px; border-radius: 10px;"
       />
-      <button type="submit" class="bg-cyan-400 p-2 rounded-lg">Submit</button>
+      <button type="submit" style="padding:10px; border-radius: 20%;" class="bg-cyan-400 p-2 rounded-lg">Submit</button>
     </form>
     <div>
       <div class="mt-5 text-xl">
-        <p>Your valid short url is :</p>
+        <p style="font-size: x-large;">Your valid short url is :</p>
         <p id="output"></p>
       </div>
     </div>
     <div class="mt-7">
       <div class="text-center mx-auto mt-8">
-        <h1 class="text-center mx-auto">Your list of short url is :</h1>
+        <h1  class="text-center mx-auto">Your list of short url is :</h1>
       </div>
-      <div id="shorturllist"></div>
+      <div id="shorturllist" style="display: flex; flex-direction: column; align-items: center;">
+      </div>
+      <table id="urlList" style="border: 1px solid whitesmoke;">
+        <tr style="font-size: 20px;">
+          <th>Src</th>
+          <th>Original url</th>
+          <th>Short-url</th>
+          <th>Total clicked</th>
+        </tr>
+      </table>
     </div>
     <script>
       document
@@ -58,14 +74,22 @@
         });
       document.addEventListener("DOMContentLoaded", async () => {
         const response = await fetch("/api/urlData");
-        const urllist = document.getElementById("shorturllist");
         const result = await response.json();
-        result.map((val) => {
-          const div = document.createElement("div");
-          const p = document.createElement("p");
-          p.innerHTML = `http://localhost:3000/url/${val.shortUrl}`;
-          div.appendChild(p);
-          urllist.appendChild(div);
+        const table = document.getElementById('urlList')
+        console.log(result);
+        result.map((val,index) => {
+          const shortUrlDemo = `http://localhost:3000/url/${val.shortUrl}`
+
+          const newrow = table.insertRow()
+          const cell1 = newrow.insertCell(0)
+          const cell2 = newrow.insertCell(1)
+          const cell3 = newrow.insertCell(2)
+          const cell4 = newrow.insertCell(3)
+
+          cell1.textContent = index + 1
+          cell2.textContent = val.url
+          cell3.textContent = shortUrlDemo
+          cell4.textContent = val.visitedHistory.length
         });
       });
     </script>

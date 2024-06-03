@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { generateNewShortURL, getAnalytics, redirectToURL } from "../controller/url.js";
-import { getUserId } from "../middelware/auth.js";
+import { isUserValid } from "../middelware/auth.js";
 
 export const urlrouter = Router()
 
-urlrouter.route('/').post(getUserId,generateNewShortURL)
+urlrouter.route('/').post(isUserValid,generateNewShortURL)
 urlrouter.route('/:shorturl').get(redirectToURL)
 urlrouter.route('/analytics/:shorturl').get(getAnalytics)

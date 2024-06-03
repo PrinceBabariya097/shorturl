@@ -49,8 +49,7 @@ const logInUser = async (req, res) => {
         }
 
           const token = setUser(isUser)
-        res.cookie('uid',token)
-
+          res.cookie('uid',token)
         return res.redirect("/")
       } catch (error) {
         throw error

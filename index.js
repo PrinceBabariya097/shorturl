@@ -5,7 +5,7 @@ import { userRouter } from "./route/user.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { URL } from "./model/url.js";
-import { getUserId, isUserValid } from "./middelware/auth.js";
+import { authenticateUserRole, isUserValid } from "./middelware/auth.js";
 import cookieParser from "cookie-parser";
 import  'dotenv/config'
 
@@ -25,10 +25,13 @@ connectMongo()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(isUserValid)
+
+
 app.use("/url", urlrouter);
 app.use("/user", userRouter);
 
-app.get("/", isUserValid, (req, res) => {
+app.get("/", authenticateUserRole(['NORMAL']), (req, res) => {
   res.sendFile(path.join(__dirname, "view", "url", "index.html"));
 });
 app.get("/signup", (req, res) => {
@@ -38,9 +41,9 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "view", "login", "index.html"));
 });
 
-app.get("/api/urlData",getUserId, async (req, res) => {
-  if (!res.user) return 
-  const userId = res.user._id;
+app.get("/api/urlData",isUserValid, async (req, res) => {
+  if (!req.user) return 
+  const userId = req.user._id;
   const urlData = await URL.find({
     owner:userId
   });
