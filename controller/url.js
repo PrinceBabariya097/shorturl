@@ -31,7 +31,6 @@ const redirectToURL = async (req, res) => {
   try {
 
     const shortUrl = req.params.shorturl;
-    console.log(shortUrl,'shortUrl');
 
     if (!shortUrl) return res.status(400).respons("url is requires");
 
@@ -42,8 +41,6 @@ const redirectToURL = async (req, res) => {
       }
     );
 
-    console.log(urlObject,'urlObject');
-    console.log(urlObject.url);
 
     res.redirect(urlObject.url);
 
@@ -58,7 +55,6 @@ const getAnalytics = async (req, res) => {
   try {
     const shortUrl = req.params.shortUrl;
     const urlData = await URL.findOne(shortUrl);
-    console.log(urlData);
     const urlClickedCount = urlData.visitedHistory.length;
     return res.status(200).json({ TotalClicked: urlClickedCount, urlData} );
   } catch (error) {

@@ -47,7 +47,6 @@ app.get("/api/urlData",isUserValid, async (req, res) => {
   const urlData = await URL.find({
     owner:userId
   });
-  console.log(urlData,"urlData");
 
   res.json(urlData);
 });
